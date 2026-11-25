@@ -1,0 +1,460 @@
+<title>Albert Einstein</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800&family=Spectral:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: una sola columna de lectura sobre bandas a sangre; el heroe lleva una
+     reticula de espaciotiempo dibujada en canvas, y los datos van en una banda tabular. */
+  :root{
+    --paper:#e9ebee;
+    --surface:#f4f5f7;
+    --ink:#14171c;
+    --muted:#5b6471;
+    --line:#ccd1d9;
+    --accent:#17457f;
+    --accent-soft:#dbe3ef;
+    --grid:#8fa2bd;
+    --font-display:"Libre Franklin","Helvetica Neue",Arial,sans-serif;
+    --font-body:"Spectral",Georgia,"Times New Roman",serif;
+    --font-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0d1117;
+      --surface:#151b23;
+      --ink:#e7ecf2;
+      --muted:#94a1b2;
+      --line:#242e3a;
+      --accent:#89afe2;
+      --accent-soft:#17212f;
+      --grid:#44628a;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0d1117;
+    --surface:#151b23;
+    --ink:#e7ecf2;
+    --muted:#94a1b2;
+    --line:#242e3a;
+    --accent:#89afe2;
+    --accent-soft:#17212f;
+    --grid:#44628a;
+    color-scheme: dark;
+  }
+
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap{
+    max-width: 44rem;
+    margin-inline: auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .band{ border-top: 1px solid var(--line); }
+  .band > .wrap{ padding-block: 3.25rem; }
+
+  h1,h2,h3,.eyebrow{ font-family: var(--font-display); text-wrap: balance; }
+  h2{
+    font-size: 1.0625rem;
+    font-weight: 800;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    margin: 0 0 1.75rem;
+    color: var(--accent);
+  }
+  p{ margin: 0 0 1.1rem; }
+  p:last-child{ margin-bottom: 0; }
+  .lede{ font-size: 1.1875rem; }
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: .78rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  /* --- Heroe --- */
+  .hero{ position: relative; overflow: hidden; background: var(--surface); }
+  #spacetime{
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    display: block;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.95), rgba(0,0,0,.35) 72%, transparent);
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,.95), rgba(0,0,0,.35) 72%, transparent);
+  }
+  .hero > .wrap{ position: relative; padding-block: 4.5rem 3.5rem; }
+  .hero h1{
+    font-size: clamp(2.75rem, 11vw, 4.75rem);
+    font-weight: 800;
+    letter-spacing: -.035em;
+    line-height: .95;
+    margin: 1.25rem 0 0;
+  }
+  .hero h1 span{ display: block; }
+  .hero h1 .sur{ color: var(--accent); }
+  .hero .lede{ margin-top: 1.5rem; max-width: 34rem; }
+  .rule{
+    width: 3.5rem; height: 3px;
+    background: var(--accent);
+    margin: 2rem 0 0;
+  }
+
+  /* --- Cifras --- */
+  .figures{ background: var(--surface); }
+  .figgrid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1.75rem 2.25rem;
+  }
+  .fig{ min-width: 0; border-top: 1px solid var(--line); padding-top: .85rem; }
+  .fig b{
+    display: block;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -.02em;
+    color: var(--ink);
+  }
+  .fig .what{ display: block; margin-top: .3rem; font-weight: 600; }
+  .fig .src{ display: block; margin-top: .25rem; font-size: .875rem; color: var(--muted); }
+
+  /* --- 1905: cuatro articulos en secuencia --- */
+  ol.papers{ list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; }
+  ol.papers li{
+    display: grid;
+    grid-template-columns: 2.75rem 1fr;
+    gap: .25rem 1rem;
+    align-items: start;
+  }
+  ol.papers .n{
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: .875rem;
+    color: var(--accent);
+    padding-top: .3rem;
+    border-top: 2px solid var(--accent-soft);
+  }
+  ol.papers .body{ min-width: 0; border-top: 1px solid var(--line); padding-top: .3rem; }
+  ol.papers h3{ font-size: 1.0625rem; font-weight: 600; margin: 0 0 .2rem; }
+  ol.papers .de{
+    font-family: var(--font-body);
+    font-style: italic;
+    color: var(--muted);
+    font-size: .9375rem;
+    margin: 0 0 .35rem;
+  }
+  .cite{ margin-top: 2rem; font-family: var(--font-mono); font-size: .8125rem; color: var(--muted); }
+
+  /* --- Cronologia --- */
+  dl.timeline{ margin: 0; display: grid; gap: 0; }
+  dl.timeline div{
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 1rem;
+    padding: .9rem 0;
+    border-top: 1px solid var(--line);
+  }
+  dl.timeline div:last-child{ border-bottom: 1px solid var(--line); }
+  dl.timeline dt{
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: .9375rem;
+    color: var(--accent);
+    padding-top: .15rem;
+  }
+  dl.timeline dd{ margin: 0; min-width: 0; }
+
+  /* --- Cita --- */
+  .quote{ background: var(--accent-soft); }
+  blockquote{
+    margin: 0;
+    font-size: clamp(1.25rem, 4.5vw, 1.625rem);
+    line-height: 1.35;
+    font-style: italic;
+    text-wrap: balance;
+  }
+  blockquote .es{
+    display: block;
+    margin-top: 1rem;
+    font-style: normal;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  figcaption{
+    margin-top: 1.25rem;
+    font-family: var(--font-mono);
+    font-size: .8125rem;
+    letter-spacing: .04em;
+    color: var(--muted);
+  }
+
+  footer .wrap{ padding-block: 2.5rem 3.5rem; }
+  footer p{ font-size: .875rem; color: var(--muted); }
+
+  @media (max-width: 420px){
+    dl.timeline div{ grid-template-columns: 1fr; gap: .15rem; }
+    ol.papers li{ grid-template-columns: 1fr; gap: .4rem; }
+    ol.papers .n{ border-top: 0; padding-top: 0; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+</style>
+
+<header class="hero">
+  <canvas id="spacetime" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <p class="eyebrow">Físico teórico · Ulm 1879 — Princeton 1955</p>
+    <h1><span>Albert</span><span class="sur">Einstein</span></h1>
+    <p class="lede">Entre marzo y septiembre de 1905, un examinador de patentes de Berna publicó
+      cuatro artículos que rehicieron la física: los cuantos de luz, el movimiento browniano,
+      la relatividad especial y la equivalencia entre masa y energía.</p>
+    <div class="rule"></div>
+  </div>
+</header>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Quién fue</h2>
+    <p>Albert Einstein (Ulm, 14 de marzo de 1879 — Princeton, 18 de abril de 1955) fue el físico
+      teórico que sustituyó el espacio y el tiempo absolutos de Newton por una sola geometría
+      deformable. Estudió en la Escuela Politécnica de Zúrich y, al no conseguir plaza académica,
+      entró en 1902 en la Oficina Federal de Patentes de Berna como <em>experto técnico de tercera
+      clase</em>. Allí, en su tiempo libre, escribió la obra de 1905.</p>
+    <p>En 1915 presentó la relatividad general: la gravedad no es una fuerza que atrae, sino la
+      curvatura del espaciotiempo que la materia produce y por la que se mueven los cuerpos y la
+      luz. La teoría explicó de inmediato un resto de 43 segundos de arco por siglo en la órbita
+      de Mercurio que la mecánica newtoniana no cuadraba, y predijo que la luz de las estrellas se
+      desviaría al pasar junto al Sol. El eclipse del 29 de mayo de 1919, medido por las expediciones
+      de Eddington a Príncipe y Sobral, dio la cifra esperada y lo convirtió en una celebridad
+      mundial en cuestión de días.</p>
+    <p>Recibió el Nobel de Física de 1921 —entregado en 1922— no por la relatividad, sino por el
+      efecto fotoeléctrico, el primero de los trabajos de 1905 y una de las piedras de la mecánica
+      cuántica, con cuya interpretación probabilista nunca llegó a conformarse. En 1933 dejó
+      Alemania y pasó el resto de su vida en el Institute for Advanced Study de Princeton.</p>
+  </div>
+</section>
+
+<section class="band figures">
+  <div class="wrap">
+    <h2>Cuatro cifras</h2>
+    <div class="figgrid">
+      <div class="fig">
+        <b>299 792 458</b>
+        <span class="what">metros por segundo</span>
+        <span class="src">La velocidad de la luz en el vacío: el mismo valor para todo observador, postulado de partida de 1905.</span>
+      </div>
+      <div class="fig">
+        <b>1,75″</b>
+        <span class="what">de desviación de la luz</span>
+        <span class="src">Lo que predice la relatividad general para un rayo que roza el Sol: el doble de lo que daba la gravedad newtoniana.</span>
+      </div>
+      <div class="fig">
+        <b>43″ / siglo</b>
+        <span class="what">en el perihelio de Mercurio</span>
+        <span class="src">El desfase que ninguna corrección newtoniana explicaba y que la teoría de 1915 resolvió sin ajustes.</span>
+      </div>
+      <div class="fig">
+        <b>1921</b>
+        <span class="what">Nobel de Física</span>
+        <span class="src">«Por sus servicios a la física teórica y, en especial, por el descubrimiento de la ley del efecto fotoeléctrico».</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>1905, el año milagroso</h2>
+    <ol class="papers">
+      <li>
+        <span class="n">01</span>
+        <div class="body">
+          <h3>Los cuantos de luz</h3>
+          <p class="de">Über einen die Erzeugung und Verwandlung des Lichtes betreffenden heuristischen Gesichtspunkt · marzo</p>
+          <p>La luz se comporta como paquetes discretos de energía. Explica el efecto fotoeléctrico y abre la física cuántica.</p>
+        </div>
+      </li>
+      <li>
+        <span class="n">02</span>
+        <div class="body">
+          <h3>El movimiento browniano</h3>
+          <p class="de">Über die von der molekularkinetischen Theorie der Wärme geforderte Bewegung… · mayo</p>
+          <p>El temblor de las partículas suspendidas en un líquido como prueba estadística de que los átomos existen y se pueden contar.</p>
+        </div>
+      </li>
+      <li>
+        <span class="n">03</span>
+        <div class="body">
+          <h3>La relatividad especial</h3>
+          <p class="de">Zur Elektrodynamik bewegter Körper · junio</p>
+          <p>Sin éter y sin tiempo universal: la simultaneidad depende de quién mide, y el espacio y el tiempo se contraen y dilatan juntos.</p>
+        </div>
+      </li>
+      <li>
+        <span class="n">04</span>
+        <div class="body">
+          <h3>Masa y energía</h3>
+          <p class="de">Ist die Trägheit eines Körpers von seinem Energieinhalt abhängig? · septiembre</p>
+          <p>Tres páginas con la consecuencia que el artículo anterior dejaba pendiente: la masa es energía en reposo, <em>E = mc²</em>.</p>
+        </div>
+      </li>
+    </ol>
+    <p class="cite">Annalen der Physik, vols. 17 y 18 (1905)</p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Cronología</h2>
+    <dl class="timeline">
+      <div><dt>1879</dt><dd>Nace en Ulm, en el reino de Wurtemberg.</dd></div>
+      <div><dt>1896—1900</dt><dd>Estudia en la Escuela Politécnica de Zúrich.</dd></div>
+      <div><dt>1902</dt><dd>Entra en la Oficina Federal de Patentes de Berna.</dd></div>
+      <div><dt>1905</dt><dd>Los cuatro artículos y su tesis doctoral en Zúrich.</dd></div>
+      <div><dt>1915</dt><dd>Presenta las ecuaciones de campo de la relatividad general.</dd></div>
+      <div><dt>1916</dt><dd>Predice las ondas gravitacionales; se detectarían en 2015.</dd></div>
+      <div><dt>1919</dt><dd>El eclipse del 29 de mayo confirma la desviación de la luz.</dd></div>
+      <div><dt>1922</dt><dd>Recoge el Nobel correspondiente a 1921.</dd></div>
+      <div><dt>1933</dt><dd>Abandona Alemania y se instala en Princeton.</dd></div>
+      <div><dt>1939</dt><dd>Firma con Szilard la carta a Roosevelt sobre la fisión del uranio.</dd></div>
+      <div><dt>1952</dt><dd>Rechaza la presidencia del Estado de Israel.</dd></div>
+      <div><dt>1955</dt><dd>Muere en Princeton a los 76 años.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="band quote">
+  <div class="wrap">
+    <figure>
+      <blockquote>
+        «Raffiniert ist der Herrgott, aber boshaft ist er nicht.»
+        <span class="es">«Dios es sutil, pero no malicioso»: la naturaleza esconde sus reglas,
+        pero no hace trampas.</span>
+      </blockquote>
+      <figcaption>Princeton, mayo de 1921</figcaption>
+    </figure>
+  </div>
+</section>
+
+<footer class="band">
+  <div class="wrap">
+    <p>Página de divulgación. Fechas, cifras y citas provienen de los artículos originales de
+      <i>Annalen der Physik</i> y del registro del Premio Nobel.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var canvas = document.getElementById('spacetime');
+  if(!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  var reduceQ = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var w = 0, h = 0, raf = null;
+
+  function size(){
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var r = canvas.getBoundingClientRect();
+    w = Math.max(r.width, 1);
+    h = Math.max(r.height, 1);
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function gridColor(){
+    var v = getComputedStyle(document.documentElement).getPropertyValue('--grid').trim();
+    return v || '#8fa2bd';
+  }
+
+  // Desplaza cada punto hacia la masa: una reticula plana vista como lente.
+  function warp(x, y, mx, my, k, out){
+    var dx = x - mx, dy = y - my;
+    var d = Math.sqrt(dx * dx + dy * dy) + 36;
+    var f = k / d;
+    out[0] = x - (dx / d) * f;
+    out[1] = y - (dy / d) * f;
+    return out;
+  }
+
+  function draw(time){
+    var mx = w * 0.70 + Math.sin(time / 9000) * w * 0.025;
+    var my = h * 0.58 + Math.cos(time / 11500) * h * 0.035;
+    var k = Math.min(w, h) * 1.15;
+    var p = [0, 0];
+    var step = w > 700 ? 7 : 10;
+    var rows = 15, cols = 19;
+    var i, j, x, y;
+
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = gridColor();
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 0.5;
+
+    for(i = 0; i <= rows; i++){
+      y = (i / rows) * h * 1.08 - h * 0.04;
+      ctx.beginPath();
+      for(x = -20; x <= w + 20; x += step){
+        warp(x, y, mx, my, k, p);
+        if(x === -20) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]);
+      }
+      ctx.stroke();
+    }
+    for(j = 0; j <= cols; j++){
+      x = (j / cols) * w * 1.08 - w * 0.04;
+      ctx.beginPath();
+      for(y = -20; y <= h + 20; y += step){
+        warp(x, y, mx, my, k, p);
+        if(y === -20) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]);
+      }
+      ctx.stroke();
+    }
+
+    ctx.globalAlpha = 0.2;
+    var radius = Math.min(w, h) * 0.42;
+    var g = ctx.createRadialGradient(mx, my, 0, mx, my, radius);
+    g.addColorStop(0, gridColor());
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(mx, my, radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  function frame(t){
+    draw(t);
+    raf = window.requestAnimationFrame(frame);
+  }
+
+  function start(){
+    if(raf){ window.cancelAnimationFrame(raf); raf = null; }
+    size();
+    if(reduceQ.matches || !window.requestAnimationFrame){
+      draw(0);
+    } else {
+      raf = window.requestAnimationFrame(frame);
+    }
+  }
+
+  var timer = null;
+  window.addEventListener('resize', function(){
+    window.clearTimeout(timer);
+    timer = window.setTimeout(start, 150);
+  });
+  if(reduceQ.addEventListener) reduceQ.addEventListener('change', start);
+  var darkQ = window.matchMedia('(prefers-color-scheme: dark)');
+  if(darkQ.addEventListener) darkQ.addEventListener('change', function(){ if(reduceQ.matches) draw(0); });
+
+  start();
+})();
+</script>
